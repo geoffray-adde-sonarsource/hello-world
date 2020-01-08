@@ -17,6 +17,10 @@ jobs:
     CXX: g++-7
   steps:
   - bash: |
+      curl 'https://peach.sonarsource.com/static/cpp/build-wrapper-linux-x86.zip' --output build-wrapper-linux-x86.zip
+      unzip build-wrapper-linux-x86.zip
+    displayName: Install buildwrapper
+  - bash: |
       set -euo pipefail
 
       cd $(Agent.TempDirectory)
