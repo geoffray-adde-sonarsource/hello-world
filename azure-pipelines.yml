@@ -67,7 +67,7 @@ jobs:
       cliSources: '.'
   - bash: |
       curl 'https://peach.sonarsource.com/static/cpp/build-wrapper-macosx-x86.zip' --output build-wrapper-macosx-x86.zip
-      unzip build-wrapper-linux-x86.zip
+      unzip build-wrapper-macosx-x86.zip
     displayName: Install buildwrapper
   - bash: |
       set -euo pipefail
