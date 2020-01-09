@@ -7,46 +7,47 @@ trigger:
 - master
 
 jobs:
-- job: BuildLinux
-  displayName: Build for Linux
-  dependsOn: [] # by specifying an empty array, this stage doesn't depend on the stage before it
-  pool:
-    vmImage: 'ubuntu-latest'
-  variables:
-    CC: gcc-7
-    CXX: g++-7
-  steps:
-  - task: SonarQubePrepare@4
-    inputs:
-      SonarQube: 'Peach'
-      scannerMode: 'CLI'
-      configMode: 'manual'
-      cliProjectKey: 'geoffray-azure-linux-test'
-      cliProjectName: 'geoffray-azure-linux-test'
-      extraProperties: 'sonar.cfamily.build-wrapper-output=build_wrapper_output_directory'
-      cliSources: '.'
-  - bash: |
-      curl 'https://peach.sonarsource.com/static/cpp/build-wrapper-linux-x86.zip' --output build-wrapper-linux-x86.zip
-      unzip build-wrapper-linux-x86.zip
-    displayName: Install buildwrapper
-  - bash: |
-      set -euo pipefail
-      cd $(Agent.TempDirectory)
-      wget -q "https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0-Linux-x86_64.tar.gz"
-      tar zxf cmake-3.15.0-Linux-x86_64.tar.gz
-      mv cmake-3.15.0-Linux-x86_64 cmake
-      cd $(Build.SourcesDirectory)
-      mkdir build
-    displayName: Install CMake 3.15
-  - bash: |
-      $(Agent.TempDirectory)/cmake/bin/cmake --version
-      $(Agent.TempDirectory)/cmake/bin/cmake -S .. -B .
-    workingDirectory: build
-    displayName: Build project files
-  - bash: |
-      build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory $(Agent.TempDirectory)/cmake/bin/cmake --build build/ --config Release
-    displayName: Compile project in build wrapper
-  - task: SonarQubeAnalyze@4
+# - job: BuildLinux
+#   displayName: Build for Linux
+#   dependsOn: [] # by specifying an empty array, this stage doesn't depend on the stage before it
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   variables:
+#     CC: gcc-7
+#     CXX: g++-7
+#   steps:
+#   - task: SonarQubePrepare@4
+#     inputs:
+#       SonarQube: 'Peach'
+#       scannerMode: 'CLI'
+#       configMode: 'manual'
+#       cliProjectKey: 'geoffray-azure-linux-test'
+#       cliProjectName: 'geoffray-azure-linux-test'
+#       extraProperties: 'sonar.cfamily.build-wrapper-output=build_wrapper_output_directory'
+#       cliSources: '.'
+#   - bash: |
+#       curl 'https://peach.sonarsource.com/static/cpp/build-wrapper-linux-x86.zip' --output build-wrapper-linux-x86.zip
+#       unzip build-wrapper-linux-x86.zip
+#     displayName: Install buildwrapper
+#   - bash: |
+#       set -euo pipefail
+#       cd $(Agent.TempDirectory)
+#       wget -q "https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0-Linux-x86_64.tar.gz"
+#       tar zxf cmake-3.15.0-Linux-x86_64.tar.gz
+#       mv cmake-3.15.0-Linux-x86_64 cmake
+#       cd $(Build.SourcesDirectory)
+#       mkdir build
+#     displayName: Install CMake 3.15
+#   - bash: |
+#       $(Agent.TempDirectory)/cmake/bin/cmake --version
+#       $(Agent.TempDirectory)/cmake/bin/cmake -S .. -B .
+#     workingDirectory: build
+#     displayName: Build project files
+#   - bash: |
+#       build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory $(Agent.TempDirectory)/cmake/bin/cmake --build build/ --config Release
+#     displayName: Compile project in build wrapper
+#   - task: SonarQubeAnalyze@4
+
 - job: BuildMac
   displayName: Build for MacOS
   dependsOn: [] # by specifying an empty array, this stage doesn't depend on the stage before it
@@ -84,6 +85,6 @@ jobs:
     workingDirectory: build_mac
     displayName: Build project files
   - bash: |
-      build-wrapper-macosx-x86/build-wrapper-macosx-x86-64 --out-dir build_wrapper_output_directory_mac $(Agent.TempDirectory)/cmake/bin/cmake --build build_mac/ --config Release
+      build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir build_wrapper_output_directory_mac $(Agent.TempDirectory)/cmake/bin/cmake --build build_mac/ --config Release
     displayName: Compile project in build wrapper
   - task: SonarQubeAnalyze@4
