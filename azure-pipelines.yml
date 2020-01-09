@@ -85,6 +85,6 @@ jobs:
     workingDirectory: build_mac
     displayName: Build project files
   - bash: |
-      build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir build_wrapper_output_directory_mac $(Agent.TempDirectory)/cmake/bin/cmake --build build_mac/ --config Release
+      build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir build_wrapper_output_directory_mac $(Agent.TempDirectory)/cmake/CMake.app/Contents/bin/cmake --build build_mac/ --config Release
     displayName: Compile project in build wrapper
   - task: SonarQubeAnalyze@4
