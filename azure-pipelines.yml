@@ -44,6 +44,6 @@ jobs:
     workingDirectory: build
     displayName: Build project files
   - bash: |
-      build-wrapper-linux-x86\build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory $(Agent.TempDirectory)/cmake/bin/cmake --build build/ --config Release
+      build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory $(Agent.TempDirectory)/cmake/bin/cmake --build build/ --config Release
     displayName: Compile project inbuild wrapper
   - task: SonarQubeAnalyze@4
