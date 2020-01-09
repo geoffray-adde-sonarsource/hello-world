@@ -45,5 +45,45 @@ jobs:
     displayName: Build project files
   - bash: |
       build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory $(Agent.TempDirectory)/cmake/bin/cmake --build build/ --config Release
-    displayName: Compile project inbuild wrapper
+    displayName: Compile project in build wrapper
+  - task: SonarQubeAnalyze@4
+- job: BuildMac
+  displayName: Build for MacOS
+  dependsOn: [] # by specifying an empty array, this stage doesn't depend on the stage before it
+  pool:
+    vmImage: 'macOS-latest'
+  variables:
+    CC: clang
+    CXX: clang++
+  steps:
+  - task: SonarQubePrepare@4
+    inputs:
+      SonarQube: 'Peach'
+      scannerMode: 'CLI'
+      configMode: 'manual'
+      cliProjectKey: 'geoffray-azure-mac-test'
+      cliProjectName: 'geoffray-azure-mac-test'
+      extraProperties: 'sonar.cfamily.build-wrapper-output=build_wrapper_output_directory_mac'
+      cliSources: '.'
+  - bash: |
+      curl 'https://peach.sonarsource.com/static/cpp/build-wrapper-macosx-x86.zip' --output build-wrapper-macosx-x86.zip
+      unzip build-wrapper-linux-x86.zip
+    displayName: Install buildwrapper
+  - bash: |
+      set -euo pipefail
+      cd $(Agent.TempDirectory)
+      wget -q "https://github.com/Kitware/CMake/releases/download/v3.15.6/cmake-3.15.6-Darwin-x86_64.tar.gz"
+      tar zxf cmake-3.15.6-Darwin-x86_64.tar.gz
+      mv cmake-3.15.6-Darwin-x86_64 cmake
+      cd $(Build.SourcesDirectory)
+      mkdir build_mac
+    displayName: Install CMake 3.15
+  - bash: |
+      $(Agent.TempDirectory)/cmake/CMake.app/Contents/bin/cmake --version
+      $(Agent.TempDirectory)/cmake/CMake.app/Contents/bin/cmake -S .. -B .
+    workingDirectory: build_mac
+    displayName: Build project files
+  - bash: |
+      build-wrapper-macosx-x86/build-wrapper-macosx-x86-64 --out-dir build_wrapper_output_directory_mac $(Agent.TempDirectory)/cmake/bin/cmake --build build_mac/ --config Release
+    displayName: Compile project in build wrapper
   - task: SonarQubeAnalyze@4
