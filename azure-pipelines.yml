@@ -90,5 +90,7 @@ jobs:
   - bash: |
       ls -larth build_wrapper_output_directory_mac
       cat build_wrapper_output_directory_mac/build-wrapper-dump.json
-      echo 'end of json dump'
+      echo '======== end of json dump ========'
+      cat build_wrapper_output_directory_mac/build-wrapper.*
+      echo '======== end of log dump ========'
   - task: SonarQubeAnalyze@4
