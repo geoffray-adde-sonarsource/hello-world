@@ -1,3 +1,9 @@
+Jenkinsfile (Declarative Pipeline)
+pipeline {
+    agent any
+
+    stages {
+    
     stage('SCM') {
       checkout scm
     }
@@ -15,3 +21,6 @@
         sh "\${scannerHome}/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output"
       }
     }
+
+    }
+}
