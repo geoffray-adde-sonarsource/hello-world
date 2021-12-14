@@ -9,7 +9,7 @@
       sh "unzip -o build-wrapper-linux-x86.zip -d .sonar"
     }
     stage('Build') {
-      sh ".sonar/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output bash -c 'rm -rf build; mkdir build; cd build; cmake ..; cmake --build.' "
+      sh ".sonar/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output bash -c 'rm -rf build; mkdir build; cd build; cmake ..; cmake --build .' "
     }
     stage('SonarQube Analysis') {
       def scannerHome = tool 'SonarScanner';
