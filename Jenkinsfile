@@ -14,7 +14,7 @@
     stage('SonarQube Analysis') {
       def scannerHome = tool 'SonarScanner';
       withSonarQubeEnv() {
-        sh "\${scannerHome}/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output"
+        sh "${scannerHome}/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output"
       }
     }
 
